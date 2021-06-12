@@ -1,31 +1,81 @@
 use std::{
-    env::args,
-    fs::File,
-    io::{BufRead, BufReader, Write},
+    env::var,
+    fs::{create_dir_all, File, OpenOptions},
+    io::{BufRead, BufReader, Seek, SeekFrom, Write},
+    path::Path,
 };
 
+use structopt::StructOpt;
+
+#[derive(StructOpt, Debug)]
+#[structopt(
+    name = "Home Manager Manager",
+    about = "Manages your Home Manager config",
+    version = env!("CARGO_PKG_VERSION"),
+
+)]
+enum Cmd {
+    #[structopt(about = "Installs a program")]
+    Add {
+        #[structopt(required = true)]
+        programs: Vec<String>,
+    },
+}
+
 fn main() {
-    let new_program = args().nth(1).expect("Missing program argument");
+    let command = Cmd::from_args();
 
-    let file = File::open("./programs.txt").expect("Couldn't open config file");
+    match command {
+        Cmd::Add { programs } => add(programs),
+    };
+}
 
-    let mut lines = BufReader::new(&file)
+fn add(new_programs: Vec<String>) {
+    let parent_path = Path::new(var("HOME").expect("HOME not defined").as_str())
+        .join(".nixpkgs")
+        .join("programs");
+
+    create_dir_all(&parent_path).expect("Couldn't create directories");
+
+    let file_path = parent_path.join("auto.txt");
+
+    let mut file = OpenOptions::new()
+        .create(true)
+        .read(true)
+        .write(true)
+        .open(&file_path)
+        .expect("Couldn't open config file");
+
+    let mut programs = BufReader::new(&file)
         .lines()
         .map(|line| line.expect("Couldn't read line"))
         .collect::<Vec<_>>();
 
-    lines.insert(lines.len(), new_program);
-    lines.sort();
-    lines.dedup();
+    let mut new_programs = new_programs.clone();
 
-    let mut file = File::create("./programs.txt").expect("Couldn't open config file for writing");
+    programs.append(&mut new_programs);
+    programs.sort();
+    programs.dedup();
 
-    let len = lines.len();
+    let total_program_count = programs.len();
 
-    for line in lines.into_iter() {
+    clear_file(&mut file);
+
+    for line in programs.into_iter() {
+        println!("Writing program {}", line);
         file.write_all((line + "\n").as_bytes())
             .expect("can't write");
     }
 
-    println!("Wrote {} lines to file", len);
+    println!(
+        "Wrote {} lines to {}",
+        total_program_count,
+        file_path.to_str().unwrap()
+    );
+}
+
+fn clear_file(file: &mut File) {
+    file.set_len(0).expect("Couldn't truncate existing file");
+    file.seek(SeekFrom::Start(0))
+        .expect("Couldn't seek to beginning of file");
 }
