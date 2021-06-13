@@ -1,11 +1,9 @@
 use std::{
-    fs::read_to_string,
-    io::{Read, Write},
+    io::Write,
     process::{Command, Stdio},
 };
 
 use rowan::SyntaxNode;
-use structopt::StructOpt;
 
 use rnix::{
     parse as parse_nix,
