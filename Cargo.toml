@@ -9,6 +9,8 @@ edition = "2018"
 [dependencies]
 structopt="0.3.17"
 colored="2"
+rnix="0.9.0"
+rowan="0.12.6"
 
 [build-dependencies]
 structopt="0.3.17"

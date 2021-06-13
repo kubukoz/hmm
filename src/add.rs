@@ -5,7 +5,7 @@ use colored::Colorize;
 use crate::files::{get_programs, write_programs};
 
 pub(crate) fn add(new_programs: Vec<String>, file: &mut File) {
-    let mut programs = get_programs(&file);
+    let mut programs = get_programs(file);
     combine_sorted(&mut programs, new_programs);
 
     let total_program_count = programs.len();

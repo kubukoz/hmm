@@ -1,11 +1,15 @@
 use std::{
     env::var,
     fs::{create_dir_all, File, OpenOptions},
-    io::{BufRead, BufReader, Seek, SeekFrom, Write},
+    io::{BufRead, BufReader, Read, Seek, SeekFrom, Write},
     path::Path,
 };
 
 use colored::Colorize;
+use rnix::{
+    parse as parse_nix,
+    types::{List, TypedNode},
+};
 
 pub(crate) fn open_rw_or_create(file_path: &std::path::PathBuf) -> File {
     OpenOptions::new()
@@ -31,7 +35,13 @@ pub(crate) fn ensure_config_file() -> std::path::PathBuf {
     parent_path.join("auto.txt")
 }
 
-pub(crate) fn get_programs(file: &File) -> Vec<String> {
+pub(crate) fn get_programs(file: &mut File) -> Vec<String> {
+    // let mut str = String::new();
+    // file.read_to_string(&mut str);
+
+    // let parsed = parse_nix(str.as_str()).root();
+    // List::cast(parsed.node().to_owned());
+
     BufReader::new(file)
         .lines()
         .map(|line| line.expect("Couldn't read line"))
