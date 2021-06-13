@@ -3,6 +3,7 @@ use std::{
     fs::{create_dir_all, File, OpenOptions},
     io::{BufRead, BufReader, Seek, SeekFrom, Write},
     path::Path,
+    process::Command,
 };
 
 use colored::*;
@@ -79,10 +80,27 @@ fn add(new_programs: Vec<String>) {
         )
         .blue()
     );
+
+    rebuild_system();
 }
 
 fn clear_file(file: &mut File) {
     file.set_len(0).expect("Couldn't truncate existing file");
     file.seek(SeekFrom::Start(0))
         .expect("Couldn't seek to beginning of file");
+}
+
+fn rebuild_system() {
+    let mut cmd = Command::new("darwin-rebuild");
+    cmd.arg("switch");
+
+    let exit = cmd
+        .spawn()
+        .expect("Couldn't start darwin-rebuild")
+        .wait()
+        .expect("System rebuild failed")
+        .code()
+        .expect("Command didn't return an exit code");
+
+    assert_eq!(exit, 0, "Command didn't complete with exit code 0");
 }
