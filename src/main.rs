@@ -2,11 +2,13 @@ mod add;
 mod cli;
 mod darwin;
 mod files;
+mod nix;
 
 use crate::add::add;
 use cli::Cmd;
 use darwin::rebuild_system;
 use files::{ensure_config_file, open_rw_or_create};
+
 use structopt::StructOpt;
 
 fn main() {
