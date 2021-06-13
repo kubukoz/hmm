@@ -5,6 +5,8 @@ use std::{
     path::Path,
 };
 
+use colored::*;
+
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -62,7 +64,8 @@ fn add(new_programs: Vec<String>) {
     clear_file(&mut file);
 
     for line in programs.into_iter() {
-        println!("Writing program {}", line);
+        println!("{}", format!("Saving program {}", line).green());
+
         file.write_all((line + "\n").as_bytes())
             .expect("can't write");
     }
