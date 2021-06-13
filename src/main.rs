@@ -71,9 +71,13 @@ fn add(new_programs: Vec<String>) {
     }
 
     println!(
-        "Wrote {} lines to {}",
-        total_program_count,
-        file_path.to_str().unwrap()
+        "{}",
+        format!(
+            "Wrote {} lines to {}",
+            total_program_count,
+            file_path.to_str().unwrap()
+        )
+        .blue()
     );
 }
 
