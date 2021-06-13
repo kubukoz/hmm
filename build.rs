@@ -1,4 +1,4 @@
-use std::{env::var, fs::create_dir_all, path::Path};
+use std::{fs::create_dir_all, path::Path};
 
 include!("src/cli.rs");
 
