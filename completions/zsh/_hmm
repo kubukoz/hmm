@@ -1,8 +1,8 @@
-#compdef 
+#compdef hmm
 
 autoload -U is-at-least
 
-_() {
+_hmm() {
     typeset -A opt_args
     typeset -a _arguments_options
     local ret=1
@@ -19,14 +19,14 @@ _() {
 '--help[Prints help information]' \
 '-V[Prints version information]' \
 '--version[Prints version information]' \
-":: :__commands" \
+":: :_hmm_commands" \
 "*::: :->Home Manager Manager" \
 && ret=0
     case $state in
     (Home Manager Manager)
         words=($line[1] "${words[@]}")
         (( CURRENT += 1 ))
-        curcontext="${curcontext%:*:*}:-command-$line[1]:"
+        curcontext="${curcontext%:*:*}:hmm-command-$line[1]:"
         case $line[1] in
             (add)
 _arguments "${_arguments_options[@]}" \
@@ -50,27 +50,27 @@ _arguments "${_arguments_options[@]}" \
 esac
 }
 
-(( $+functions[__commands] )) ||
-__commands() {
+(( $+functions[_hmm_commands] )) ||
+_hmm_commands() {
     local commands; commands=(
         "add:Installs a program" \
 "help:Prints this message or the help of the given subcommand(s)" \
     )
-    _describe -t commands ' commands' commands "$@"
+    _describe -t commands 'hmm commands' commands "$@"
 }
-(( $+functions[___add_commands] )) ||
-___add_commands() {
+(( $+functions[_hmm__add_commands] )) ||
+_hmm__add_commands() {
     local commands; commands=(
         
     )
-    _describe -t commands ' add commands' commands "$@"
+    _describe -t commands 'hmm add commands' commands "$@"
 }
-(( $+functions[___help_commands] )) ||
-___help_commands() {
+(( $+functions[_hmm__help_commands] )) ||
+_hmm__help_commands() {
     local commands; commands=(
         
     )
-    _describe -t commands ' help commands' commands "$@"
+    _describe -t commands 'hmm help commands' commands "$@"
 }
 
-_ "$@"
+_hmm "$@"

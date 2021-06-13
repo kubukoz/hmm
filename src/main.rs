@@ -27,7 +27,7 @@ enum Cmd {
 fn main() {
     // todo: generate this during cargo build?
     // Cmd::clap().gen_completions_to(
-    //     "",
+    //     "hmm",
     //     structopt::clap::Shell::Zsh,
     //     &mut File::create("./completions/zsh/_hmm").expect("Couldn't open completions file"),
     // );
