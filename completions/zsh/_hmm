@@ -1,0 +1,76 @@
+#compdef 
+
+autoload -U is-at-least
+
+_() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+":: :__commands" \
+"*::: :->Home Manager Manager" \
+&& ret=0
+    case $state in
+    (Home Manager Manager)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:-command-$line[1]:"
+        case $line[1] in
+            (add)
+_arguments "${_arguments_options[@]}" \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+':programs:_files' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+'-h[Prints help information]' \
+'--help[Prints help information]' \
+'-V[Prints version information]' \
+'--version[Prints version information]' \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[__commands] )) ||
+__commands() {
+    local commands; commands=(
+        "add:Installs a program" \
+"help:Prints this message or the help of the given subcommand(s)" \
+    )
+    _describe -t commands ' commands' commands "$@"
+}
+(( $+functions[___add_commands] )) ||
+___add_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands ' add commands' commands "$@"
+}
+(( $+functions[___help_commands] )) ||
+___help_commands() {
+    local commands; commands=(
+        
+    )
+    _describe -t commands ' help commands' commands "$@"
+}
+
+_ "$@"
