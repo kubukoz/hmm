@@ -27,9 +27,10 @@ fn main() {
 
     let parsed = parse_nix_string_list(str);
 
-    dbg!(&parsed);
+    // dbg!(&parsed);
 
     let stringified = render_string_list(&parsed);
+    // println!("{}", stringified);
     let out = nixfmt_run(stringified);
     println!("{}", out);
     // let command = Cmd::from_args();
@@ -95,7 +96,15 @@ fn nixfmt_run(input: String) -> String {
 }
 
 fn render_string_list(values: &Vec<String>) -> String {
+    let prelude = r#"
+#
+# This file was written by hmm (Home Manager Manager).
+# Don't edit it manually!
+#
+"#;
+
     let mut s = String::new();
+    s.push_str(prelude);
     s.push('[');
 
     let values_string = values
