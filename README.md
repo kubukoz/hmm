@@ -2,6 +2,8 @@
 
 "Home Manager" Manager.
 
+The purpose of this program is to let me manage https://github.com/kubukoz/nix-config/ without opening an editor every time I want to install something (think `nix-env` but with home-manager / nix-darwin). Works on my machine, if you want it to work on yours feel free to fork/contribute.
+
 ```
 Home Manager Manager 0.1.0
 Manages your Home Manager config
