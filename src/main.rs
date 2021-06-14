@@ -24,5 +24,8 @@ fn main() {
 
             rebuild_system()
         }
+        Cmd::Vscode(vsc) => {
+            panic!("kalm")
+        }
     };
 }

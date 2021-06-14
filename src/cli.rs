@@ -13,4 +13,17 @@ pub(crate) enum Cmd {
         #[structopt(required = true)]
         programs: Vec<String>,
     },
+    #[structopt(about = "Gateway to vscode programs")]
+    Vscode(Vscode),
+}
+
+#[derive(StructOpt, Debug)]
+pub(crate) enum Vscode {
+    #[structopt(about = "Installs an extension")]
+    Add {
+        #[structopt(required = true)]
+        extension: String,
+        // default: latest
+        version: String,
+    },
 }
