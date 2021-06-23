@@ -41,12 +41,13 @@ pub(crate) fn get_programs(file: &mut File) -> Vec<String> {
 }
 
 pub(crate) fn write_programs(programs: Vec<String>, file: &mut File) {
-    clear_file(file);
+    let formatted = nixfmt_run(render_string_list(&programs));
 
     for line in programs.iter() {
         println!("{}", format!("Saving program {}", line).green());
     }
 
-    file.write_all(nixfmt_run(render_string_list(&programs)).as_bytes())
+    clear_file(file);
+    file.write_all(formatted.as_bytes())
         .expect("Couldn't write to file");
 }
