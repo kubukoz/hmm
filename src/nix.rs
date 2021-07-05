@@ -58,7 +58,7 @@ pub(crate) fn nixfmt_run(input: String) -> String {
         .expect("Couldn't read valid ")
 }
 
-pub(crate) fn render_string_list(values: &Vec<String>) -> String {
+pub(crate) fn render_nix_string_list(values: &Vec<String>) -> String {
     let mut s = String::new();
     s.push_str(prelude("This file should always parse as an array of string literals.").as_str());
     s.push('[');
