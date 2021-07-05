@@ -3,6 +3,7 @@ mod cli;
 mod darwin;
 mod files;
 mod nix;
+mod vscode;
 
 use crate::add::add;
 use cli::Cmd;
@@ -38,6 +39,20 @@ fn main() {
 
                 rebuild_system()
             }
+            Vscode::Managed(man) => match man {
+                cli::Managed::Update { extension, version } => {
+                    let file_path = root_path()
+                        .join("vscode")
+                        .join("extensions")
+                        .join("managed.nix");
+
+                    let mut file = open_rw_or_create(&file_path);
+
+                    vscode::update(extension, version, &mut file);
+
+                    rebuild_system()
+                }
+            },
         },
     };
 }

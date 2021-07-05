@@ -59,15 +59,8 @@ pub(crate) fn nixfmt_run(input: String) -> String {
 }
 
 pub(crate) fn render_string_list(values: &Vec<String>) -> String {
-    let prelude = r#"
-#
-# This file was written by hmm (Home Manager Manager).
-# Don't edit it manually!
-#
-"#;
-
     let mut s = String::new();
-    s.push_str(prelude);
+    s.push_str(prelude("This file should always parse as an array of string literals.").as_str());
     s.push('[');
 
     let values_string = values
@@ -85,4 +78,18 @@ pub(crate) fn render_string_list(values: &Vec<String>) -> String {
 
     s.push(']');
     s
+}
+
+fn prelude(details: &str) -> String {
+    format!(
+        r#"
+    #
+    # This file was written by hmm (Home Manager Manager).
+    # Don't edit it manually!
+    # {}
+    #
+    "#,
+        details
+    )
+    .to_string()
 }
