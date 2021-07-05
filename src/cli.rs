@@ -8,7 +8,7 @@ use structopt::StructOpt;
 
 )]
 pub(crate) enum Cmd {
-    #[structopt(about = "Installs a program")]
+    #[structopt(about = "Installs programs")]
     Add {
         #[structopt(required = true)]
         programs: Vec<String>,
@@ -19,11 +19,12 @@ pub(crate) enum Cmd {
 
 #[derive(StructOpt, Debug)]
 pub(crate) enum Vscode {
-    #[structopt(about = "Installs an extension")]
+    #[structopt(about = "Installs extensions")]
     Add {
         #[structopt(required = true)]
-        extension: String,
+        extensions: Vec<String>,
+        // todo: support versions. Currently only adds a package from pkgs.vscode-extensions
         // default: latest
-        version: String,
+        // version: String,
     },
 }

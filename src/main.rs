@@ -6,8 +6,9 @@ mod nix;
 
 use crate::add::add;
 use cli::Cmd;
+use cli::Vscode;
 use darwin::rebuild_system;
-use files::{ensure_config_file, open_rw_or_create};
+use files::{open_rw_or_create, root_path};
 
 use structopt::StructOpt;
 
@@ -16,7 +17,7 @@ fn main() {
 
     match command {
         Cmd::Add { programs } => {
-            let file_path = ensure_config_file();
+            let file_path = root_path().join("programs").join("auto.nix");
 
             let mut file = open_rw_or_create(&file_path);
 
@@ -24,8 +25,19 @@ fn main() {
 
             rebuild_system()
         }
-        Cmd::Vscode(vsc) => {
-            panic!("kalm")
-        }
+        Cmd::Vscode(vsc) => match vsc {
+            Vscode::Add { extensions } => {
+                let file_path = root_path()
+                    .join("vscode")
+                    .join("extensions")
+                    .join("auto.nix");
+
+                let mut file = open_rw_or_create(&file_path);
+
+                add(extensions, &mut file);
+
+                rebuild_system()
+            }
+        },
     };
 }

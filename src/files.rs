@@ -1,6 +1,6 @@
 use std::{
     env::var,
-    fs::{create_dir_all, File, OpenOptions},
+    fs::{File, OpenOptions},
     io::{Read, Seek, SeekFrom, Write},
     path::Path,
 };
@@ -24,13 +24,8 @@ fn clear_file(file: &mut File) {
         .expect("Couldn't seek to beginning of file");
 }
 
-pub(crate) fn ensure_config_file() -> std::path::PathBuf {
-    let parent_path = Path::new(var("HOME").expect("HOME not defined").as_str())
-        .join(".nixpkgs")
-        .join("programs");
-
-    create_dir_all(&parent_path).expect("Couldn't create directories");
-    parent_path.join("auto.nix")
+pub(crate) fn root_path() -> std::path::PathBuf {
+    Path::new(var("HOME").expect("HOME not defined").as_str()).join(".nixpkgs")
 }
 
 pub(crate) fn get_programs(file: &mut File) -> Vec<String> {
