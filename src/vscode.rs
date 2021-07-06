@@ -34,6 +34,15 @@ fn decode_vscode_package(attrs: Attrs) -> Package {
     }
 }
 
+fn download_extension_info(name: String, publisher: String) {
+    // POST https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery?api-version=6.1-preview
+    // body: {"filters":[{"criteria":[{"filterType":7,"value":"kubukoz.nickel-syntax"}]}], "flags": 103}
+    // response: jq ".results | map(.extensions) | flatten | map(.versions)" - find latest by lastUpdated
+    // take files.source where assetType=Microsoft.VisualStudio.Services.VSIXPackage
+    // nix-prefetch-url and that's the sha256
+    todo!()
+}
+
 #[derive(Debug)]
 struct Package {
     name: String,
