@@ -40,7 +40,7 @@ fn main() {
                 rebuild_system()
             }
             Vscode::Managed(man) => match man {
-                cli::Managed::Update { extension, version } => {
+                cli::Managed::Update => {
                     let file_path = root_path()
                         .join("vscode")
                         .join("extensions")
@@ -48,7 +48,7 @@ fn main() {
 
                     let mut file = open_rw_or_create(&file_path);
 
-                    vscode::update(extension, version, &mut file);
+                    vscode::update(&mut file);
 
                     rebuild_system()
                 }

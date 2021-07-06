@@ -32,12 +32,6 @@ pub(crate) enum Vscode {
 
 #[derive(StructOpt, Debug)]
 pub(crate) enum Managed {
-    #[structopt(about = "Updates a managed extension")]
-    Update {
-        #[structopt(required = true)]
-        extension: String,
-        // default: latest
-        // todo change to default|semver?
-        version: Option<String>,
-    },
+    #[structopt(about = "Updates all managed extensions")]
+    Update,
 }
