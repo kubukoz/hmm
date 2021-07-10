@@ -46,3 +46,19 @@ Installs the given program(s):
 - sorts the lines, deduplicates them
 - writes the result as a Nix string array to the same file
 - finally, triggers `darwin-rebuild switch` and expects it to succeed.
+
+### vscode add
+
+Installs the given vscode extension in `~/.nixpkgs/vscode/extensions/auto.nix`. Same rules as `add`.
+
+### vscode managed update
+
+Updates all vscode extensions in `~/.nixpkgs/vscode/extensions/managed.nix`:
+
+- reads the file
+- parses everything as nix and expects a list of vscode packages
+- queries VS Code Marketplace for the latest version
+- if the version doesn't match the one in the file, its artifact is prefetched
+- the version/sha256 of the package are updated
+- everything is written back to the same file
+- `darwin-rebuild switch` is triggered.

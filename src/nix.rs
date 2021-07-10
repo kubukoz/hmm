@@ -120,6 +120,8 @@ pub(crate) fn nix_prefetch_url(url: String) -> String {
             .stdout,
     )
     .expect("Couldn't read valid string")
+    .trim()
+    .to_string()
 }
 
 pub(crate) fn render_nix_string_list(values: &Vec<String>) -> String {
