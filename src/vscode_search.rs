@@ -55,15 +55,23 @@ pub(crate) fn download_latest_extension(package: Package, client: &Client) -> Pa
 
     // Skip download if the version didn't change
     let sha256 = if last_version.version != package.version {
+        println!(
+            "{}",
+            format!(
+                "Updating {}.{} ({} -> {})",
+                package.publisher, package.name, package.version, last_version.version
+            )
+            .green()
+        );
         nix_prefetch_url(last_version_url)
     } else {
         println!(
             "{}",
             format!(
-                "Skipping update for {}.{} because it didn't change",
-                package.publisher, package.name
+                "Skipping update for {}.{} because it didn't change ({})",
+                package.publisher, package.name, package.version
             )
-            .green()
+            .blue()
         );
         package.sha256
     };
