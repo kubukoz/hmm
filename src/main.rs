@@ -4,6 +4,7 @@ mod darwin;
 mod files;
 mod nix;
 mod vscode;
+mod vscode_search;
 
 use crate::add::add;
 use cli::Cmd;
