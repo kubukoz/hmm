@@ -103,15 +103,27 @@ pub(crate) fn nixfmt_run(input: String) -> String {
 
     // todo: read exit code?
     String::from_utf8(process.wait_with_output().expect("nixfmt failed").stdout)
-        .expect("Couldn't read valid ")
+        .expect("Couldn't read valid string")
+}
+
+pub(crate) fn nix_prefetch_url(url: String) -> String {
+    let process = Command::new("nix-prefetch-url")
+        .arg(url)
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+
+    String::from_utf8(
+        process
+            .wait_with_output()
+            .expect("nix-prefetch-url failed")
+            .stdout,
+    )
+    .expect("Couldn't read valid string")
 }
 
 pub(crate) fn render_nix_string_list(values: &Vec<String>) -> String {
-    let mut s = String::new();
-    s.push_str(prelude("This file should always parse as an array of string literals.").as_str());
-    s.push('[');
-
-    let values_string = values
+    let string_literals = values
         .clone()
         .iter_mut()
         .map(|v| {
@@ -119,12 +131,45 @@ pub(crate) fn render_nix_string_list(values: &Vec<String>) -> String {
             v.push_str("\"");
             v.to_string()
         })
-        .collect::<Vec<_>>()
-        .join(" ");
+        .collect::<Vec<_>>();
 
-    s.push_str(values_string.as_str());
+    let mut s = String::new();
+    s.push_str(prelude("This file should always parse as an array of string literals.").as_str());
+    s.push_str(render_list(&string_literals).as_str());
+    s
+}
 
+fn render_list(exprs: &Vec<String>) -> String {
+    let mut s = String::new();
+    s.push('[');
+    s.push_str(exprs.join(" ").as_str());
     s.push(']');
+    s
+}
+
+pub(crate) fn render_nix_attributes_list(attrs: &Vec<Attrs>) -> String {
+    let attr_strings = attrs
+        .into_iter()
+        .map(render_nix_attributes)
+        .collect::<Vec<_>>();
+
+    let mut s = String::new();
+    s.push_str(prelude("This file should always parse as an array of attrsets.").as_str());
+    s.push_str(render_list(&attr_strings).as_str());
+    s
+}
+
+fn render_nix_attributes(attrs: &Attrs) -> String {
+    let mut s = String::new();
+    s.push('{');
+
+    attrs
+        .0
+        .iter()
+        .for_each(|attr| s.push_str(format!("{} = \"{}\";", attr.name, attr.value).as_str()));
+
+    s.push('}');
+
     s
 }
 

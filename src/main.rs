@@ -50,7 +50,7 @@ fn main() {
 
                     vscode::update(&mut file);
 
-                    rebuild_system()
+                    // rebuild_system()
                 }
             },
         },
