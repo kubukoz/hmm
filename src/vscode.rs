@@ -13,39 +13,19 @@ use serde::Deserialize;
 use serde_json::json;
 
 pub(crate) fn update(file: &mut File) {
-    let packages = parse_nix_attributes_list(read_file(file))
-        .into_iter()
-        .map(decode_vscode_package)
-        .collect::<Vec<_>>();
+    let client = Client::new();
 
-    let updated_packages = packages
+    let updated_packages = parse_nix_attributes_list(read_file(file))
         .into_iter()
-        .map(download_latest_extension)
+        .map(Package::from_attrs)
+        .map(|p| download_latest_extension(p, &client))
         .map(Package::to_attrs)
         .collect::<Vec<_>>();
 
     write_file(
-        nixfmt_run(render_nix_attributes_list(&&updated_packages)),
+        nixfmt_run(render_nix_attributes_list(&updated_packages)),
         file,
     );
-}
-
-fn decode_vscode_package(attrs: Attrs) -> Package {
-    let mut indexed: HashMap<String, String> = HashMap::default();
-
-    attrs.0.into_iter().for_each(|attr| {
-        indexed.insert(attr.name, attr.value);
-    });
-
-    Package {
-        name: indexed.get("name").expect("name missing").to_owned(),
-        publisher: indexed
-            .get("publisher")
-            .expect("publisher missing")
-            .to_owned(),
-        version: indexed.get("version").expect("version missing").to_owned(),
-        sha256: indexed.get("sha256").expect("sha256 missing").to_owned(),
-    }
 }
 
 #[derive(Deserialize, Debug)]
@@ -77,9 +57,7 @@ struct Asset {
     source: String,
 }
 
-fn download_latest_extension(package: Package) -> Package {
-    let client = Client::new();
-
+fn download_latest_extension(package: Package, client: &Client) -> Package {
     let req = json!({
         "filters": [
             {"criteria": [{
@@ -151,5 +129,23 @@ impl Package {
                 value: self.sha256,
             },
         ])
+    }
+
+    fn from_attrs(attrs: Attrs) -> Package {
+        let mut indexed: HashMap<String, String> = HashMap::default();
+
+        attrs.0.into_iter().for_each(|attr| {
+            indexed.insert(attr.name, attr.value);
+        });
+
+        Package {
+            name: indexed.get("name").expect("name missing").to_owned(),
+            publisher: indexed
+                .get("publisher")
+                .expect("publisher missing")
+                .to_owned(),
+            version: indexed.get("version").expect("version missing").to_owned(),
+            sha256: indexed.get("sha256").expect("sha256 missing").to_owned(),
+        }
     }
 }
