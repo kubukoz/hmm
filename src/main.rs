@@ -49,9 +49,13 @@ fn main() {
 
                     let mut file = open_rw_or_create(&file_path);
 
-                    vscode::update(&mut file);
+                    let result = vscode::managed_update(&mut file);
 
-                    rebuild_system()
+                    if result.packages_updated > 0 {
+                        rebuild_system()
+                    } else {
+                        println!("{}", "No updates found, skipping system update")
+                    }
                 }
             },
         },

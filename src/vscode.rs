@@ -7,13 +7,23 @@ use crate::{
 };
 use reqwest::blocking::Client;
 
-pub(crate) fn update(file: &mut File) {
+pub(crate) fn managed_update(file: &mut File) -> UpdateResult {
     let client = Client::new();
+
+    let mut updated_count = 0;
 
     let updated_packages = parse_nix_attributes_list(read_file(file))
         .into_iter()
         .map(Package::from_attrs)
-        .map(|p| download_latest_extension(p, &client))
+        .map(|p| {
+            let result = download_latest_extension(&p, &client);
+
+            if p != result {
+                updated_count += 1
+            }
+
+            result
+        })
         .map(Package::to_attrs)
         .collect::<Vec<_>>();
 
@@ -21,9 +31,15 @@ pub(crate) fn update(file: &mut File) {
         nixfmt_run(render_nix_attributes_list(&updated_packages)),
         file,
     );
+    UpdateResult {
+        packages_updated: 0,
+    }
 }
 
-#[derive(Debug)]
+pub(crate) struct UpdateResult {
+    pub packages_updated: usize,
+}
+#[derive(Debug, PartialEq)]
 pub(crate) struct Package {
     pub name: String,
     pub publisher: String,

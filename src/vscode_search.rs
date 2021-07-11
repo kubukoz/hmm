@@ -35,8 +35,8 @@ struct Asset {
     source: String,
 }
 
-pub(crate) fn download_latest_extension(package: Package, client: &Client) -> Package {
-    let response: SearchResults = search_versions(&package, client);
+pub(crate) fn download_latest_extension(package: &Package, client: &Client) -> Package {
+    let response: SearchResults = search_versions(package, client);
 
     let last_version = response
         .results
@@ -73,12 +73,12 @@ pub(crate) fn download_latest_extension(package: Package, client: &Client) -> Pa
             )
             .blue()
         );
-        package.sha256
+        package.sha256.clone()
     };
 
     Package {
-        name: package.name,
-        publisher: package.publisher,
+        name: package.name.clone(),
+        publisher: package.publisher.clone(),
         version: last_version.version,
         sha256,
     }
