@@ -23,9 +23,6 @@ pub(crate) enum Vscode {
     Add {
         #[structopt(required = true)]
         extensions: Vec<String>,
-        // todo: support versions. Currently only adds a package from pkgs.vscode-extensions
-        // default: latest
-        // version: String,
     },
     Managed(Managed),
 }
@@ -34,4 +31,5 @@ pub(crate) enum Vscode {
 pub(crate) enum Managed {
     #[structopt(about = "Updates all managed extensions")]
     Update,
+    // todo: add - install the latest version as managed
 }
