@@ -3,6 +3,7 @@ use std::{collections::HashMap, fs::File};
 use crate::{
     files::{read_file, write_file},
     nix::{nixfmt_run, parse_nix_attributes_list, render_nix_attributes_list, Attr, Attrs},
+    types::UpdateResult,
     vscode_search::download_latest_extension,
 };
 use reqwest::blocking::Client;
@@ -10,7 +11,7 @@ use reqwest::blocking::Client;
 pub(crate) fn managed_update(file: &mut File) -> UpdateResult {
     let client = Client::new();
 
-    let mut updated_count = 0;
+    let mut updated_count: usize = 0;
 
     let updated_packages = parse_nix_attributes_list(read_file(file))
         .into_iter()
@@ -32,13 +33,10 @@ pub(crate) fn managed_update(file: &mut File) -> UpdateResult {
         file,
     );
     UpdateResult {
-        packages_updated: 0,
+        was_updated: updated_count > 0,
     }
 }
 
-pub(crate) struct UpdateResult {
-    pub packages_updated: usize,
-}
 #[derive(Debug, PartialEq)]
 pub(crate) struct Package {
     pub name: String,

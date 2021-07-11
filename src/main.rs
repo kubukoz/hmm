@@ -3,6 +3,7 @@ mod cli;
 mod darwin;
 mod files;
 mod nix;
+mod types;
 mod vscode;
 mod vscode_search;
 
@@ -23,9 +24,13 @@ fn main() {
 
             let mut file = open_rw_or_create(&file_path);
 
-            add(programs, &mut file);
+            let result = add(programs, &mut file);
 
-            rebuild_system()
+            if result.was_updated {
+                rebuild_system()
+            } else {
+                println!("No new packages were added, skipping system rebuild")
+            }
         }
         Cmd::Vscode(vsc) => match vsc {
             Vscode::Add { extensions } => {
@@ -36,9 +41,13 @@ fn main() {
 
                 let mut file = open_rw_or_create(&file_path);
 
-                add(extensions, &mut file);
+                let result = add(extensions, &mut file);
 
-                rebuild_system()
+                if result.was_updated {
+                    rebuild_system()
+                } else {
+                    println!("No new packages were added, skipping system rebuild")
+                }
             }
             Vscode::Managed(man) => match man {
                 cli::Managed::Update => {
@@ -51,10 +60,10 @@ fn main() {
 
                     let result = vscode::managed_update(&mut file);
 
-                    if result.packages_updated > 0 {
+                    if result.was_updated {
                         rebuild_system()
                     } else {
-                        println!("{}", "No updates found, skipping system update")
+                        println!("No updates found, skipping system rebuild")
                     }
                 }
             },
