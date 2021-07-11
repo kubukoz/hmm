@@ -177,13 +177,14 @@ fn render_nix_attributes(attrs: &Attrs) -> String {
 
 fn prelude(details: &str) -> String {
     format!(
-        r#"#
+        r"
+        #
     #
     # This file was written by hmm (Home Manager Manager).
     # Don't edit it manually!
     # {}
     #
-    "#,
+    ",
         details
     )
     .to_string()

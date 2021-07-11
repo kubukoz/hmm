@@ -51,16 +51,22 @@ fn main() {
             }
             Vscode::Managed(man) => match man {
                 cli::Managed::Update => {
-                    let file_path = root_path()
-                        .join("vscode")
-                        .join("extensions")
-                        .join("managed.nix");
+                    let result_main = vscode::managed_update(&mut open_rw_or_create(
+                        &root_path()
+                            .join("vscode")
+                            .join("extensions")
+                            .join("managed.nix"),
+                    ));
 
-                    let mut file = open_rw_or_create(&file_path);
+                    let result_work = vscode::managed_update(&mut open_rw_or_create(
+                        &root_path()
+                            .join("work")
+                            .join("vscode")
+                            .join("extensions")
+                            .join("managed.nix"),
+                    ));
 
-                    let result = vscode::managed_update(&mut file);
-
-                    if result.was_updated {
+                    if result_main.was_updated || result_work.was_updated {
                         rebuild_system()
                     } else {
                         println!("No updates found, skipping system rebuild")
