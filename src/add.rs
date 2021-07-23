@@ -5,10 +5,10 @@ use colored::Colorize;
 use crate::{
     files::{read_file, write_file},
     nix::{nixfmt_run, parse_nix_string_list, render_nix_string_list},
-    types::UpdateResult,
+    types::{Add, UpdateKind, UpdateResult},
 };
 
-pub(crate) fn add(new_programs: &Vec<String>, file: &mut File) -> UpdateResult {
+pub(crate) fn add(new_programs: &Vec<String>, file: &mut File) -> UpdateResult<Add> {
     let old_programs = parse_nix_string_list(read_file(file));
     let mut programs = old_programs.clone();
 
@@ -23,9 +23,17 @@ pub(crate) fn add(new_programs: &Vec<String>, file: &mut File) -> UpdateResult {
     write_file(nixfmt_run(render_nix_string_list(&programs)), file);
     print_summary(total_program_count);
 
-    let was_updated = old_programs != programs;
+    let updates = new_programs
+        .to_owned()
+        .into_iter()
+        .filter(|p| !old_programs.contains(p))
+        .map(|p| Add { program: p })
+        .collect();
 
-    UpdateResult { was_updated }
+    UpdateResult {
+        updates,
+        kind: UpdateKind::Add,
+    }
 }
 
 fn print_summary(total_program_count: usize) {

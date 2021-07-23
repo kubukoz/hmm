@@ -3,15 +3,15 @@ use std::{collections::HashMap, fs::File};
 use crate::{
     files::{read_file, write_file},
     nix::{nixfmt_run, parse_nix_attributes_list, render_nix_attributes_list, Attr, Attrs},
-    types::UpdateResult,
+    types::{Update, UpdateKind, UpdateResult},
     vscode_search::download_latest_extension,
 };
 use reqwest::blocking::Client;
 
-pub(crate) fn managed_update(file: &mut File) -> UpdateResult {
+pub(crate) fn managed_update(file: &mut File) -> UpdateResult<Update> {
     let client = Client::new();
 
-    let mut updated_count: usize = 0;
+    let mut updates: Vec<Update> = Vec::default();
 
     let updated_packages = parse_nix_attributes_list(read_file(file))
         .into_iter()
@@ -20,7 +20,11 @@ pub(crate) fn managed_update(file: &mut File) -> UpdateResult {
             let result = download_latest_extension(&p, &client);
 
             if p != result {
-                updated_count += 1
+                updates.push(Update {
+                    program: p.publisher + "." + p.name.as_str(),
+                    from: p.version,
+                    to: result.version.clone(),
+                });
             }
 
             result
@@ -32,8 +36,10 @@ pub(crate) fn managed_update(file: &mut File) -> UpdateResult {
         nixfmt_run(render_nix_attributes_list(&updated_packages)),
         file,
     );
+
     UpdateResult {
-        was_updated: updated_count > 0,
+        updates,
+        kind: UpdateKind::Update,
     }
 }
 

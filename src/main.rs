@@ -16,6 +16,7 @@ use cli::Vscode;
 use darwin::rebuild_system;
 use files::{open_rw_or_create, root_path};
 
+use crate::types::ToCommitMessage;
 use git::git_commit;
 use structopt::StructOpt;
 
@@ -32,13 +33,10 @@ fn main() {
 
             let result = add(&programs, &mut file);
 
-            if result.was_updated {
+            if result.was_updated() {
                 rebuild_system();
-                git_commit(
-                    &vec![relative_path.as_path()],
-                    format!("(hmm) Add {}", programs.join(", ")),
-                )
-                .expect("Couldn't commit");
+                git_commit(&vec![relative_path.as_path()], result.to_commit_message())
+                    .expect("Couldn't commit");
             } else {
                 println!("No new packages were added, skipping system rebuild")
             }
@@ -56,37 +54,48 @@ fn main() {
 
                 let result = add(&extensions, &mut file);
 
-                if result.was_updated {
+                if result.was_updated() {
                     rebuild_system();
 
-                    git_commit(
-                        &vec![relative_path.as_path()],
-                        format!("(hmm) Vscode: Add {}", extensions.join(", ")),
-                    )
-                    .expect("Couldn't commit");
+                    git_commit(&vec![relative_path.as_path()], result.to_commit_message())
+                        .expect("Couldn't commit");
                 } else {
                     println!("No new packages were added, skipping system rebuild")
                 }
             }
             Vscode::Managed(man) => match man {
                 cli::Managed::Update => {
-                    let result_main = vscode::managed_update(&mut open_rw_or_create(
-                        &root_path()
-                            .join("vscode")
-                            .join("extensions")
-                            .join("managed.nix"),
+                    let result_main_relative = PathBuf::default()
+                        .join("vscode")
+                        .join("extensions")
+                        .join("managed.nix");
+
+                    let mut result_main = vscode::managed_update(&mut open_rw_or_create(
+                        &root_path().join(&result_main_relative),
                     ));
 
-                    let result_work = vscode::managed_update(&mut open_rw_or_create(
-                        &root_path()
-                            .join("work")
-                            .join("vscode")
-                            .join("extensions")
-                            .join("managed.nix"),
+                    let result_work_relative = PathBuf::default()
+                        .join("work")
+                        .join("vscode")
+                        .join("extensions")
+                        .join("managed.nix");
+
+                    let mut result_work = vscode::managed_update(&mut open_rw_or_create(
+                        &root_path().join(&result_work_relative),
                     ));
 
-                    if result_main.was_updated || result_work.was_updated {
-                        rebuild_system()
+                    let results = result_main.join(&mut result_work);
+
+                    if results.was_updated() {
+                        rebuild_system();
+                        git_commit(
+                            &vec![
+                                result_main_relative.as_path(),
+                                result_work_relative.as_path(),
+                            ],
+                            results.to_commit_message(),
+                        )
+                        .expect("Couldn't commit")
                     } else {
                         println!("No updates found, skipping system rebuild")
                     }
