@@ -8,11 +8,11 @@ use crate::{
     types::UpdateResult,
 };
 
-pub(crate) fn add(new_programs: Vec<String>, file: &mut File) -> UpdateResult {
+pub(crate) fn add(new_programs: &Vec<String>, file: &mut File) -> UpdateResult {
     let old_programs = parse_nix_string_list(read_file(file));
     let mut programs = old_programs.clone();
 
-    combine_sorted(&mut programs, new_programs);
+    combine_sorted(&mut programs, &new_programs);
 
     let total_program_count = programs.len();
 
@@ -32,7 +32,7 @@ fn print_summary(total_program_count: usize) {
     println!("{}", format!("Wrote {} lines", total_program_count,).blue());
 }
 
-fn combine_sorted<T: Ord + Clone>(old: &mut Vec<T>, new: Vec<T>) {
+fn combine_sorted<T: Ord + Clone>(old: &mut Vec<T>, new: &Vec<T>) {
     old.append(&mut new.clone());
     old.sort();
     old.dedup();
