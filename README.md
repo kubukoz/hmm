@@ -21,7 +21,7 @@ Provides zsh completions (generated to `./completions/zsh` at build time).
 ```shell
 $ hmm help
 
-Home Manager Manager 0.4.0
+Home Manager Manager 0.5.0
 Manages your Home Manager config
 
 USAGE:
@@ -36,6 +36,8 @@ SUBCOMMANDS:
     help      Prints this message or the help of the given subcommand(s)
     vscode    Gateway to vscode programs
 ```
+
+All commands commit the files they change with details about the change.
 
 ### add
 
