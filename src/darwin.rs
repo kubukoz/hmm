@@ -4,8 +4,6 @@ use std::process::Command;
 pub(crate) fn rebuild_system() {
     let exit = Command::new("darwin-rebuild")
         .arg("switch")
-        .arg("--flake")
-        .arg("~/.nixpkgs")
         .spawn()
         .expect("Couldn't start darwin-rebuild")
         .wait()
