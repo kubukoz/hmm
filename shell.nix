@@ -1,5 +1,4 @@
 # For compatibility with non-flake-enabled Nix versions
-{ system ? builtins.currentSystem, ... }:
 (
   import
     (
