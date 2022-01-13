@@ -1,4 +1,4 @@
-{ pkgs, stdenv, installShellFiles, lib, darwin, openssl }:
+{ pkgs, stdenv, installShellFiles, lib, darwin, openssl, pkg-config, zlib }:
 
 (import ./Cargo.nix { inherit pkgs; }).rootCrate.build.overrideAttrs (prev: {
   buildInputs = prev.buildInputs ++ [ openssl ];
@@ -7,6 +7,8 @@
   ] ++
     lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.Security
+      pkg-config
+      zlib
     ];
 
   postInstall = ''
