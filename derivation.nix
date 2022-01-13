@@ -10,6 +10,6 @@
     ];
 
   postInstall = ''
-    installShellCompletion --name _hmm completions/zsh/_hmm
+    installShellCompletion --name _hmm completions/zsh/_hmm --zsh
   '';
 })
