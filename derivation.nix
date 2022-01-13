@@ -1,6 +1,7 @@
-{ pkgs, stdenv, installShellFiles, lib, darwin }:
+{ pkgs, stdenv, installShellFiles, lib, darwin, openssl }:
 
 (import ./Cargo.nix { inherit pkgs; }).rootCrate.build.overrideAttrs (prev: {
+  buildInputs = prev.buildInputs ++ [ openssl ];
   nativeBuildInputs = prev.nativeBuildInputs ++ [
     installShellFiles
   ] ++
