@@ -70,29 +70,16 @@ fn main() {
                         .join("extensions")
                         .join("managed.nix");
 
-                    let mut result_main = vscode::managed_update(&mut open_rw_or_create(
+                    let result_main = vscode::managed_update(&mut open_rw_or_create(
                         &root_path().join(&result_main_relative),
                     ));
 
-                    let result_work_relative = PathBuf::default()
-                        .join("work")
-                        .join("vscode")
-                        .join("extensions")
-                        .join("managed.nix");
-
-                    let mut result_work = vscode::managed_update(&mut open_rw_or_create(
-                        &root_path().join(&result_work_relative),
-                    ));
-
-                    let results = result_main.join(&mut result_work);
+                    let results = result_main;
 
                     if results.was_updated() {
                         rebuild_system();
                         git_commit(
-                            &vec![
-                                result_main_relative.as_path(),
-                                result_work_relative.as_path(),
-                            ],
+                            &vec![result_main_relative.as_path()],
                             results.to_commit_message(),
                         )
                         .expect("Couldn't commit")
