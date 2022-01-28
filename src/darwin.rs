@@ -1,11 +1,11 @@
-use std::process::Command;
+use std::{env::var, process::Command};
 
 /// Runs darwin-rebuild and expects it to succeed.
 pub(crate) fn rebuild_system() {
     let exit = Command::new("darwin-rebuild")
-        .arg("switch")
+        .arg("build")
         .arg("--flake")
-        .arg("~/.nixpkgs")
+        .arg(var("HOME").expect("HOME is not defined!") + "/.nixpkgs")
         .spawn()
         .expect("Couldn't start darwin-rebuild")
         .wait()
