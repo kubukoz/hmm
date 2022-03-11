@@ -46,7 +46,7 @@ pub(crate) struct Add {
 impl ToCommitMessage for Add {
     fn to_commit_message(&self) -> String {
         let version_string: String = match self.version.clone() {
-            Some(v) => v,
+            Some(v) => format!(": {}", v),
             None => "".to_string(),
         };
 
