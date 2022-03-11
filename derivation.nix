@@ -6,6 +6,7 @@
   buildInputs = prev.buildInputs ++ [
     openssl
     pkgs.rustfmt
+    pkgs.crate2nix
   ];
   nativeBuildInputs = prev.nativeBuildInputs ++ [
     installShellFiles

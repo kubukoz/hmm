@@ -43,6 +43,42 @@ pub(crate) fn managed_update(file: &mut File) -> UpdateResult<Update> {
     }
 }
 
+pub(crate) fn managed_add(extensions: &Vec<String>, file: &mut File) -> UpdateResult<Update> {
+    let client = Client::new();
+
+    let mut updates: Vec<Update> = Vec::default();
+
+    let mut packages = parse_nix_attributes_list(read_file(file))
+        .into_iter()
+        .map(Package::from_attrs)
+        .collect::<Vec<_>>();
+
+    extensions
+        .into_iter()
+        .map(|e| {
+            let p = download_latest_extension(&Package::from_publisher_name(e), &client);
+
+            if !packages.contains(&p) {
+                updates.push(Update {
+                    program: p.publisher.clone() + "." + p.name.as_str().clone(),
+                    from: "".to_string(),
+                    to: p.version.clone(),
+                });
+
+                packages.push(p);
+            }
+        })
+        .for_each(drop);
+
+    let packages = packages.into_iter().map(Package::to_attrs).collect();
+
+    write_file(nixfmt_run(render_nix_attributes_list(&packages)), file);
+    UpdateResult {
+        updates,
+        kind: UpdateKind::Add,
+    }
+}
+
 #[derive(Debug, PartialEq)]
 pub(crate) struct Package {
     pub name: String,
@@ -88,6 +124,17 @@ impl Package {
                 .to_owned(),
             version: indexed.get("version").expect("version missing").to_owned(),
             sha256: indexed.get("sha256").expect("sha256 missing").to_owned(),
+        }
+    }
+
+    fn from_publisher_name(e: &str) -> Package {
+        let mut split = e.split('.');
+
+        Package {
+            publisher: split.next().unwrap().to_owned(),
+            name: split.next().unwrap().to_owned(),
+            version: "".to_string(),
+            sha256: "".to_string(),
         }
     }
 }

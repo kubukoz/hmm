@@ -48,7 +48,6 @@ Installs the given program(s):
 - adds all the parameters as lines
 - sorts the lines, deduplicates them
 - writes the result as a Nix string array to the same file
-- finally, triggers `darwin-rebuild switch` and expects it to succeed.
 
 ### vscode add
 

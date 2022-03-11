@@ -31,5 +31,9 @@ pub(crate) enum Vscode {
 pub(crate) enum Managed {
     #[structopt(about = "Updates all managed extensions")]
     Update,
-    // todo: add - install the latest version as managed
+    #[structopt(about = "Installs extensions as managed")]
+    Add {
+        #[structopt(required = true)]
+        extensions: Vec<String>,
+    },
 }

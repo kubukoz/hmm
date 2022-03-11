@@ -1,6 +1,6 @@
 [package]
 name = "hmm"
-version = "0.6.1"
+version = "0.7.0"
 authors = ["Jakub Kozłowski <kubukoz@gmail.com>"]
 edition = "2018"
 
@@ -15,7 +15,6 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json="1.0"
 git2="0.13"
 reqwest = { version = "0.11", features = ["json","blocking"]}
-chrono = { version = "0.4", features = ["serde"]}
 
 [build-dependencies]
 structopt="0.3"
