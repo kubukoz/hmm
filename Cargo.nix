@@ -251,7 +251,7 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
         };
       };
-      "clap" = rec {
+      "clap 2.34.0" = rec {
         crateName = "clap";
         version = "2.34.0";
         edition = "2018";
@@ -277,12 +277,12 @@ rec {
           }
           {
             name = "strsim";
-            packageId = "strsim";
+            packageId = "strsim 0.8.0";
             optional = true;
           }
           {
             name = "textwrap";
-            packageId = "textwrap";
+            packageId = "textwrap 0.11.0";
           }
           {
             name = "unicode-width";
@@ -303,6 +303,60 @@ rec {
           "yaml" = [ "yaml-rust" ];
         };
         resolvedDefaultFeatures = [ "ansi_term" "atty" "color" "default" "strsim" "suggestions" "vec_map" ];
+      };
+      "clap 3.1.6" = rec {
+        crateName = "clap";
+        version = "3.1.6";
+        edition = "2018";
+        sha256 = "08q1hkksfixybnrwrpm44xq028wbn9yr2hnzrax9hihyq8v39jfq";
+        dependencies = [
+          {
+            name = "atty";
+            packageId = "atty";
+            optional = true;
+          }
+          {
+            name = "bitflags";
+            packageId = "bitflags";
+          }
+          {
+            name = "indexmap";
+            packageId = "indexmap";
+          }
+          {
+            name = "os_str_bytes";
+            packageId = "os_str_bytes";
+          }
+          {
+            name = "strsim";
+            packageId = "strsim 0.10.0";
+            optional = true;
+          }
+          {
+            name = "termcolor";
+            packageId = "termcolor";
+            optional = true;
+          }
+          {
+            name = "textwrap";
+            packageId = "textwrap 0.15.0";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "cargo" = [ "lazy_static" ];
+          "color" = [ "atty" "termcolor" ];
+          "debug" = [ "clap_derive/debug" "backtrace" ];
+          "default" = [ "std" "color" "suggestions" ];
+          "derive" = [ "clap_derive" "lazy_static" ];
+          "std" = [ "indexmap/std" ];
+          "suggestions" = [ "strsim" ];
+          "unicode" = [ "textwrap/unicode-width" "unicase" ];
+          "unstable-doc" = [ "derive" "cargo" "wrap_help" "yaml" "env" "unicode" "regex" "unstable-replace" "unstable-multicall" "unstable-grouped" ];
+          "wrap_help" = [ "terminal_size" "textwrap/terminal_size" ];
+          "yaml" = [ "yaml-rust" ];
+        };
+        resolvedDefaultFeatures = [ "atty" "color" "default" "std" "strsim" "suggestions" "termcolor" ];
       };
       "colored" = rec {
         crateName = "colored";
@@ -830,7 +884,7 @@ rec {
       };
       "hmm" = rec {
         crateName = "hmm";
-        version = "0.7.0";
+        version = "0.7.1";
         edition = "2018";
         crateBin = [
           { name = "hmm"; path = "src/main.rs"; }
@@ -878,7 +932,7 @@ rec {
         buildDependencies = [
           {
             name = "clap";
-            packageId = "clap";
+            packageId = "clap 3.1.6";
           }
           {
             name = "structopt";
@@ -1794,6 +1848,26 @@ rec {
           "vendored" = [ "openssl-src" ];
         };
       };
+      "os_str_bytes" = rec {
+        crateName = "os_str_bytes";
+        version = "6.0.0";
+        edition = "2018";
+        sha256 = "0r5z5xds2wzzqlqjaw96dpjsz5nqyzc1rflm4mh09aa32qyl88lf";
+        authors = [
+          "dylni"
+        ];
+        dependencies = [
+          {
+            name = "memchr";
+            packageId = "memchr";
+            optional = true;
+          }
+        ];
+        features = {
+          "default" = [ "memchr" "raw_os_str" ];
+        };
+        resolvedDefaultFeatures = [ "default" "memchr" "raw_os_str" ];
+      };
       "percent-encoding" = rec {
         crateName = "percent-encoding";
         version = "2.1.0";
@@ -2587,7 +2661,17 @@ rec {
         };
         resolvedDefaultFeatures = [ "all" ];
       };
-      "strsim" = rec {
+      "strsim 0.10.0" = rec {
+        crateName = "strsim";
+        version = "0.10.0";
+        edition = "2015";
+        sha256 = "08s69r4rcrahwnickvi0kq49z524ci50capybln83mg6b473qivk";
+        authors = [
+          "Danny Guo <danny@dannyguo.com>"
+        ];
+
+      };
+      "strsim 0.8.0" = rec {
         crateName = "strsim";
         version = "0.8.0";
         edition = "2015";
@@ -2609,7 +2693,7 @@ rec {
         dependencies = [
           {
             name = "clap";
-            packageId = "clap";
+            packageId = "clap 2.34.0";
             usesDefaultFeatures = false;
           }
           {
@@ -2747,6 +2831,23 @@ rec {
         features = {
         };
       };
+      "termcolor" = rec {
+        crateName = "termcolor";
+        version = "1.1.3";
+        edition = "2018";
+        sha256 = "0mbpflskhnz3jf312k50vn0hqbql8ga2rk0k79pkgchip4q4vcms";
+        authors = [
+          "Andrew Gallant <jamslam@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "winapi-util";
+            packageId = "winapi-util";
+            target = { target, features }: (target."windows" or false);
+          }
+        ];
+
+      };
       "text-size" = rec {
         crateName = "text-size";
         version = "1.1.0";
@@ -2758,7 +2859,7 @@ rec {
         ];
 
       };
-      "textwrap" = rec {
+      "textwrap 0.11.0" = rec {
         crateName = "textwrap";
         version = "0.11.0";
         edition = "2015";
@@ -2773,6 +2874,18 @@ rec {
           }
         ];
 
+      };
+      "textwrap 0.15.0" = rec {
+        crateName = "textwrap";
+        version = "0.15.0";
+        edition = "2018";
+        sha256 = "1yw513k61lfiwgqrfvsjw1a5wpvm0azhpjr2kr0jhnq9c56is55i";
+        authors = [
+          "Martin Geisler <martin@geisler.net>"
+        ];
+        features = {
+          "default" = [ "unicode-linebreak" "unicode-width" "smawk" ];
+        };
       };
       "tinyvec" = rec {
         crateName = "tinyvec";
@@ -3877,7 +3990,7 @@ rec {
         features = {
           "debug" = [ "impl-debug" ];
         };
-        resolvedDefaultFeatures = [ "cfg" "consoleapi" "errhandlingapi" "evntrace" "fileapi" "handleapi" "impl-debug" "impl-default" "in6addr" "inaddr" "ioapiset" "lmcons" "minschannel" "minwinbase" "minwindef" "mswsock" "namedpipeapi" "ntdef" "ntsecapi" "processenv" "schannel" "securitybaseapi" "sspi" "std" "synchapi" "sysinfoapi" "timezoneapi" "winbase" "wincrypt" "windef" "winerror" "winioctl" "winnt" "winreg" "winsock2" "ws2def" "ws2ipdef" "ws2tcpip" ];
+        resolvedDefaultFeatures = [ "cfg" "consoleapi" "errhandlingapi" "evntrace" "fileapi" "handleapi" "impl-debug" "impl-default" "in6addr" "inaddr" "ioapiset" "lmcons" "minschannel" "minwinbase" "minwindef" "mswsock" "namedpipeapi" "ntdef" "ntsecapi" "processenv" "schannel" "securitybaseapi" "sspi" "std" "synchapi" "sysinfoapi" "timezoneapi" "winbase" "wincon" "wincrypt" "windef" "winerror" "winioctl" "winnt" "winreg" "winsock2" "ws2def" "ws2ipdef" "ws2tcpip" ];
       };
       "winapi-i686-pc-windows-gnu" = rec {
         crateName = "winapi-i686-pc-windows-gnu";
@@ -3886,6 +3999,24 @@ rec {
         sha256 = "1dmpa6mvcvzz16zg6d5vrfy4bxgg541wxrcip7cnshi06v38ffxc";
         authors = [
           "Peter Atashian <retep998@gmail.com>"
+        ];
+
+      };
+      "winapi-util" = rec {
+        crateName = "winapi-util";
+        version = "0.1.5";
+        edition = "2018";
+        sha256 = "0y71bp7f6d536czj40dhqk0d55wfbbwqfp2ymqf1an5ibgl6rv3h";
+        authors = [
+          "Andrew Gallant <jamslam@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "winapi";
+            packageId = "winapi";
+            target = { target, features }: (target."windows" or false);
+            features = [ "std" "consoleapi" "errhandlingapi" "fileapi" "minwindef" "processenv" "winbase" "wincon" "winerror" "winnt" ];
+          }
         ];
 
       };

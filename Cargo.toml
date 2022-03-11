@@ -1,6 +1,6 @@
 [package]
 name = "hmm"
-version = "0.7.0"
+version = "0.7.1"
 authors = ["Jakub Kozłowski <kubukoz@gmail.com>"]
 edition = "2018"
 
@@ -18,4 +18,4 @@ reqwest = { version = "0.11", features = ["json","blocking"]}
 
 [build-dependencies]
 structopt="0.3"
-clap="2.23"
+clap="3.1"
