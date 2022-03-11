@@ -27,7 +27,10 @@ pub(crate) fn add(new_programs: &Vec<String>, file: &mut File) -> UpdateResult<A
         .to_owned()
         .into_iter()
         .filter(|p| !old_programs.contains(p))
-        .map(|p| Add { program: p })
+        .map(|p| Add {
+            program: p,
+            version: None,
+        })
         .collect();
 
     UpdateResult {

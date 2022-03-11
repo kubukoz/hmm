@@ -7,11 +7,6 @@ impl<T: ToCommitMessage> UpdateResult<T> {
     pub(crate) fn was_updated(&self) -> bool {
         !self.updates.is_empty()
     }
-
-    pub(crate) fn join(&mut self, another: &mut UpdateResult<T>) -> &mut Self {
-        self.updates.append(&mut another.updates);
-        self
-    }
 }
 
 impl<T: ToCommitMessage + Clone> ToCommitMessage for UpdateResult<T> {
@@ -45,11 +40,17 @@ pub(crate) enum UpdateKind {
 #[derive(Clone)]
 pub(crate) struct Add {
     pub program: String,
+    pub version: Option<String>,
 }
 
 impl ToCommitMessage for Add {
     fn to_commit_message(&self) -> String {
-        self.program.clone()
+        let version_string: String = match self.version.clone() {
+            Some(v) => v,
+            None => "".to_string(),
+        };
+
+        format!("{}{}", self.program.as_str(), version_string)
     }
 }
 

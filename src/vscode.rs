@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs::File};
 use crate::{
     files::{read_file, write_file},
     nix::{nixfmt_run, parse_nix_attributes_list, render_nix_attributes_list, Attr, Attrs},
-    types::{Update, UpdateKind, UpdateResult},
+    types::{Add, Update, UpdateKind, UpdateResult},
     vscode_search::download_latest_extension,
 };
 use reqwest::blocking::Client;
@@ -43,10 +43,10 @@ pub(crate) fn managed_update(file: &mut File) -> UpdateResult<Update> {
     }
 }
 
-pub(crate) fn managed_add(extensions: &Vec<String>, file: &mut File) -> UpdateResult<Update> {
+pub(crate) fn managed_add(extensions: &Vec<String>, file: &mut File) -> UpdateResult<Add> {
     let client = Client::new();
 
-    let mut updates: Vec<Update> = Vec::default();
+    let mut updates: Vec<Add> = Vec::default();
 
     let mut packages = parse_nix_attributes_list(read_file(file))
         .into_iter()
@@ -59,10 +59,9 @@ pub(crate) fn managed_add(extensions: &Vec<String>, file: &mut File) -> UpdateRe
             let p = download_latest_extension(&Package::from_publisher_name(e), &client);
 
             if !packages.contains(&p) {
-                updates.push(Update {
+                updates.push(Add {
                     program: p.publisher.clone() + "." + p.name.as_str().clone(),
-                    from: "".to_string(),
-                    to: p.version.clone(),
+                    version: Some(p.version.clone()),
                 });
 
                 packages.push(p);

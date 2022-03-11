@@ -14,7 +14,7 @@ Provides zsh completions (generated to `./completions/zsh` at build time).
 
 ## Requirements
 
-`nixfmt`, nix-darwin
+`nixfmt`
 
 ## Usage
 
@@ -63,4 +63,3 @@ Updates all vscode extensions in `~/.nixpkgs/vscode/extensions/managed.nix`:
 - if the version doesn't match the one in the file, its artifact is prefetched
 - the version/sha256 of the package are updated
 - everything is written back to the same file
-- `darwin-rebuild switch` is triggered.
