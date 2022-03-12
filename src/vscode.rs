@@ -137,3 +137,56 @@ impl Package {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        nix::{Attr, Attrs},
+        vscode::Package,
+    };
+
+    #[test]
+    fn package_from_publisher_name() {
+        assert_eq!(
+            Package::from_publisher_name("rust-lang.rust"),
+            Package {
+                publisher: "rust-lang".to_string(),
+                name: "rust".to_string(),
+                version: "".to_string(),
+                sha256: "".to_string(),
+            }
+        );
+    }
+
+    #[test]
+    fn package_from_attrs() {
+        let attrs = vec![
+            Attr {
+                name: "name".to_string(),
+                value: "rust".to_string(),
+            },
+            Attr {
+                name: "publisher".to_string(),
+                value: "rust-lang".to_string(),
+            },
+            Attr {
+                name: "version".to_string(),
+                value: "1.0.0".to_string(),
+            },
+            Attr {
+                name: "sha256".to_string(),
+                value: "test".to_string(),
+            },
+        ];
+
+        assert_eq!(
+            Package::from_attrs(Attrs(attrs)),
+            Package {
+                publisher: "rust-lang".to_string(),
+                name: "rust".to_string(),
+                version: "1.0.0".to_string(),
+                sha256: "test".to_string(),
+            }
+        );
+    }
+}
