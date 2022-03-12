@@ -8,6 +8,7 @@ use std::{
 use crate::nix::nixfmt_run;
 
 pub(crate) fn open_rw_or_create(file_path: &std::path::PathBuf) -> File {
+    println!("Reading {}", file_path.display());
     OpenOptions::new()
         .create(true)
         .read(true)
