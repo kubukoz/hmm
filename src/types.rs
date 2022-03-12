@@ -66,3 +66,45 @@ impl ToCommitMessage for Update {
         format!("{}: {} -> {}", self.program, self.from, self.to)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::types::{Add, ToCommitMessage, Update};
+
+    #[test]
+    fn add_with_version_message() {
+        assert_eq!(
+            Add {
+                program: "demo".to_string(),
+                version: Some("1.0.0".to_string())
+            }
+            .to_commit_message(),
+            "demo: 1.0.0"
+        );
+    }
+
+    #[test]
+    fn add_without_version_message() {
+        assert_eq!(
+            Add {
+                program: "demo".to_string(),
+                version: None
+            }
+            .to_commit_message(),
+            "demo"
+        );
+    }
+
+    #[test]
+    fn update_message() {
+        assert_eq!(
+            Update {
+                program: "demo".to_string(),
+                from: "1.0.0".to_string(),
+                to: "2.0.0".to_string()
+            }
+            .to_commit_message(),
+            "demo: 1.0.0 -> 2.0.0"
+        );
+    }
+}
