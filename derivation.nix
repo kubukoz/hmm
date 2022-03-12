@@ -1,6 +1,7 @@
 { pkgs, stdenv, installShellFiles, lib, darwin, openssl, pkg-config, zlib, gitignore-source }:
+let cargo_nix = import ./Cargo.nix { inherit pkgs; }; in
 
-(import ./Cargo.nix { inherit pkgs; }).rootCrate.build.overrideAttrs (prev: {
+cargo_nix.rootCrate.build.overrideAttrs (prev: {
   src = gitignore-source.lib.gitignoreSource ./.;
 
   buildInputs = prev.buildInputs ++ [
