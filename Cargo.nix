@@ -1018,9 +1018,9 @@ rec {
       };
       "hyper" = rec {
         crateName = "hyper";
-        version = "0.14.17";
+        version = "0.14.18";
         edition = "2018";
-        sha256 = "1pc5m8k2h6b3vlvl6ylppc5nbz7lhvmx2xwacp6bc0cr7q40wgq4";type = [ "lib" "staticlib" "cdylib" ];
+        sha256 = "1whf3qqvxcpbp1dfpzy6lhl4yjl1wfcby2nrc4417gpy1alf0smj";
         authors = [
           "Sean McArthur <sean@seanmonstar.com>"
         ];
@@ -1308,9 +1308,9 @@ rec {
       };
       "libc" = rec {
         crateName = "libc";
-        version = "0.2.119";
+        version = "0.2.121";
         edition = "2015";
-        sha256 = "195a2q4lfhg7dc72vmchma3mzdcxpkiz6xpak3hchmrlpdjy3whv";
+        sha256 = "0kzz2l87069gnij2vbw6a1kdjl8pbs4y677jdgmyhprv1wq7papg";
         authors = [
           "The Rust Project Developers"
         ];
@@ -1469,9 +1469,9 @@ rec {
       };
       "log" = rec {
         crateName = "log";
-        version = "0.4.14";
+        version = "0.4.16";
         edition = "2015";
-        sha256 = "04175hv0v62shd82qydq58a48k3bjijmk54v38zgqlbxqkkbpfai";
+        sha256 = "1f62871i8phpphfk9chr5s4wia8kr55y4nlhpqbbrxczhj8c92b3";
         authors = [
           "The Rust Project Developers"
         ];
@@ -1545,9 +1545,9 @@ rec {
       };
       "mio" = rec {
         crateName = "mio";
-        version = "0.8.1";
+        version = "0.8.2";
         edition = "2018";
-        sha256 = "1y5ncd68jnp5j9g85yg686qcdq89ahz2jyydp6fpp4d5qqsj393v";
+        sha256 = "1jdhsv4470irbajggr2w0ijbjkq1yfirh6l4m4rzxr5hzxj47njj";
         authors = [
           "Carl Lerche <me@carllerche.com>"
           "Thomas de Zeeuw <thomasdezeeuw@gmail.com>"
@@ -1995,9 +1995,9 @@ rec {
       };
       "quote" = rec {
         crateName = "quote";
-        version = "1.0.15";
+        version = "1.0.16";
         edition = "2018";
-        sha256 = "0id1q0875pvhkg0mlb5z8gzdm2g2rbbz76bfzhv331lrm2b3wkc6";
+        sha256 = "0mysqcqshvcvwr720lffp6bvks5c4mqg31p80zgzqcs5f722xbxl";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -2051,9 +2051,9 @@ rec {
       };
       "reqwest" = rec {
         crateName = "reqwest";
-        version = "0.11.9";
+        version = "0.11.10";
         edition = "2018";
-        sha256 = "0995ng67r8rry8864wxp2iwkpr4sc34fgny6p9wrllwa93ql5wl7";
+        sha256 = "1ss1ijakw48dgpxaj5a38pk0r3vmzhdgaj842ssfir9m9ymgg8a6";
         authors = [
           "Sean McArthur <sean@seanmonstar.com>"
         ];
@@ -2756,9 +2756,9 @@ rec {
       };
       "syn" = rec {
         crateName = "syn";
-        version = "1.0.86";
+        version = "1.0.89";
         edition = "2018";
-        sha256 = "0sqwa4nqxzm89nj8xd8sk4iz0hbrw3mb17b6hyc2w2d0zzsb6rca";
+        sha256 = "0m4zzg6vdcya02vivb1m2wv6shyfkwh5mqbwq3f9h8ym43i7naga";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -4032,9 +4032,9 @@ rec {
       };
       "winreg" = rec {
         crateName = "winreg";
-        version = "0.7.0";
+        version = "0.10.1";
         edition = "2015";
-        sha256 = "0sdxcyvda4v1v6a0k1j2v1400z3ng323k9a56gxvkq51x21dn801";
+        sha256 = "17c6h02z88ijjba02bnxi5k94q5cz490nf3njh9yypf8fbig9l40";
         authors = [
           "Igor Shaula <gentoo90@gmail.com>"
         ];
