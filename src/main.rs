@@ -11,6 +11,7 @@ use std::path::PathBuf;
 
 use crate::add::add;
 use cli::Cmd;
+use cli::Managed;
 use cli::Vscode;
 use files::{open_rw_or_create, root_path};
 
@@ -21,6 +22,10 @@ use structopt::StructOpt;
 fn main() {
     let command = Cmd::from_args();
 
+    handle(command);
+}
+
+fn handle(command: Cmd) {
     match command {
         Cmd::Add { programs } => {
             let relative_path = PathBuf::default().join("programs").join("auto.nix");
@@ -39,7 +44,10 @@ fn main() {
             }
         }
         Cmd::Vscode(vsc) => match vsc {
-            Vscode::Add { extensions } => {
+            Vscode::Add {
+                extensions,
+                managed,
+            } => {
                 let relative_path = PathBuf::default()
                     .join("vscode")
                     .join("extensions")
@@ -54,6 +62,10 @@ fn main() {
                 if result.was_updated() {
                     git_commit(&vec![relative_path.as_path()], result.to_commit_message())
                         .expect("Couldn't commit");
+
+                    if managed {
+                        handle(Cmd::Vscode(Vscode::Managed(Managed::Add { extensions })))
+                    }
                 } else {
                     println!("No new packages were added, skipping commit")
                 }

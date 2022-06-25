@@ -23,6 +23,8 @@ pub(crate) enum Vscode {
     Add {
         #[structopt(required = true)]
         extensions: Vec<String>,
+        #[structopt(long)]
+        managed: bool,
     },
     Managed(Managed),
 }
