@@ -2,11 +2,11 @@
   "nodes": {
     "flake-utils": {
       "locked": {
-        "lastModified": 1656928814,
-        "narHash": "sha256-RIFfgBuKz6Hp89yRr7+NR5tzIAbn52h8vT6vXkYjZoM=",
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "7e2a3b3dfd9af950a856d66b0a7d01e3c18aa249",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
         "type": "github"
       },
       "original": {
@@ -15,33 +15,33 @@
         "type": "github"
       }
     },
-    "gitignore-source": {
+    "naersk": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1658402513,
-        "narHash": "sha256-wk38v/mbLsOo6+IDmmH1H0ADR87iq9QTTD1BP9X2Ags=",
-        "owner": "hercules-ci",
-        "repo": "gitignore.nix",
-        "rev": "f2ea0f8ff1bce948ccb6b893d15d5ea3efaf1364",
+        "lastModified": 1671096816,
+        "narHash": "sha256-ezQCsNgmpUHdZANDCILm3RvtO1xH8uujk/+EqNvzIOg=",
+        "owner": "nix-community",
+        "repo": "naersk",
+        "rev": "d998160d6a076cfe8f9741e56aeec7e267e3e114",
         "type": "github"
       },
       "original": {
-        "owner": "hercules-ci",
-        "repo": "gitignore.nix",
+        "owner": "nix-community",
+        "repo": "naersk",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1658504988,
-        "narHash": "sha256-W/TtazL/aFuQ760+3yTCtBfUPl8djaGFRXdMqh4Ua78=",
+        "lastModified": 1673831250,
+        "narHash": "sha256-1TmdNPMY4CB8CK1g2TThLnCvJG7SwB390pxBvZLzFJ0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "87cb1156a91a8bd9c0a3488904582d692064df8b",
+        "rev": "6fecd5a257327db6116b28acdfb45561e65e3dfa",
         "type": "github"
       },
       "original": {
@@ -53,7 +53,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "gitignore-source": "gitignore-source",
+        "naersk": "naersk",
         "nixpkgs": "nixpkgs"
       }
     }

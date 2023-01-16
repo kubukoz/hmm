@@ -33,7 +33,7 @@ fn handle(command: Cmd) {
             let file_path = root_path().join(&relative_path);
 
             let mut file = open_rw_or_create(&file_path);
-
+            //
             let result = add(&programs, &mut file);
 
             if result.was_updated() {
