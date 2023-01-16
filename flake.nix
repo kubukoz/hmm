@@ -19,15 +19,14 @@
           buildInputs = [
             pkgs.openssl
             pkgs.rustfmt
-            pkgs.crate2nix
           ];
 
           nativeBuildInputs = [
             pkgs.installShellFiles
+            pkgs.pkg-config
           ] ++
           pkgs.lib.optionals pkgs.stdenv.isDarwin [
             pkgs.darwin.apple_sdk.frameworks.Security
-            pkgs.pkg-config
             pkgs.zlib
           ];
 
