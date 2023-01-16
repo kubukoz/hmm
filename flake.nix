@@ -12,7 +12,7 @@
         naersk = pkgs.callPackage inputs.naersk { };
       in
       {
-        defaultPackage = naersk.buildPackage {
+        packages.default = naersk.buildPackage {
           # Assuming there's `Cargo.toml` right in this directory:
           src = ./.;
 
@@ -35,9 +35,7 @@
             installShellCompletion --name _hmm completions/zsh/_hmm --zsh
           '';
         };
-        checks = {
-          defaultPackageBuild = self.defaultPackage.${system};
-        };
+        checks = self.packages.${system};
       }
     );
 }
